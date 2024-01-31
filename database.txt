@@ -1,0 +1,8 @@
+CREATE DATABASE School;
+USE School;
+CREATE TABLE Student (
+    Fname VARCHAR(255),
+    Lname VARCHAR(255),
+    Gender VARCHAR(10),
+    RegNumber VARCHAR(20)
+);
