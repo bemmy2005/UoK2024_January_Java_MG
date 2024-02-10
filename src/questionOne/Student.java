@@ -18,7 +18,9 @@ public class Student {
 	private String Gender;// (string): Gender
 	private String RegNumber;// (string): Registration number
 
-
+	public Student() {
+		
+	}
 	public Student(String fname, String lname, String gender, String regNumber) {
 		super();
 		Fname = fname;
@@ -51,13 +53,13 @@ public class Student {
 		RegNumber = regNumber;
 	}
 	public void register() {
-		String host = "jdbc:mysql://localhost/school";
+		String host = "jdbc:mysql://localhost/schools";
 		String user = "root";
 		String password = "";
 
 		// SQL query to insert data
-		String sql = "INSERT INTO student(Fname,Lname,RegNumber) VALUES (?,?,?,?)";
-		String sqlQuery = "SELECT Fname FROM user";
+		String sql = "INSERT INTO student(Fname,Lname,gender, RegNumber) VALUES (?,?,?,?)";
+		String sqlQuery = "SELECT Fname FROM student";
 
 		try (// Establish the connection
 				Connection connection = DriverManager.getConnection(host, user, password);
@@ -79,8 +81,8 @@ public class Student {
 			// Set the values for the prepared statement
 			preparedStatement.setString(1, this.Fname);
 			preparedStatement.setString(2, this.Lname);
-			preparedStatement.setString(2, this.Gender);
-			preparedStatement.setString(3, this.RegNumber);
+			preparedStatement.setString(3, this.Gender);
+			preparedStatement.setString(4, this.RegNumber);
 			for(String data:dataArray) {
 				if (data==this.Fname) {
 					System.out.println("The firstname you entered is already used!");
@@ -105,13 +107,13 @@ public class Student {
 		}
 	}
 	public void registertwo() {
-		String host = "jdbc:mysql://localhost/school";
+		String host = "jdbc:mysql://localhost/schools";
 		String user = "root";
 		String password = "";
 
 		// SQL query to insert data
-		String sql = "INSERT INTO student(Fname,Lname,RegNumber) VALUES (?,?,?,?)";
-		String sqlQuery = "SELECT Fname FROM user";
+		String sql = "INSERT INTO student(Fname,Lname,Gender,RegNumber) VALUES (?,?,?,?)";
+		String sqlQuery = "SELECT Fname FROM student";
 
 		try (
 				// Establish the connection
@@ -169,7 +171,7 @@ public class Student {
 		}
 	}
 	public void displayInformation() {
-		String url = "jdbc:mysql://localhost/school";
+		String url = "jdbc:mysql://localhost/schools";
 		String user = "root";
 		String password = "";
 		// SQL query to retrieve data
@@ -220,7 +222,7 @@ public class Student {
 		}
 	}
 	public void displaytwo() {
-		String url = "jdbc:mysql://localhost/school";
+		String url = "jdbc:mysql://localhost/schools";
 		String user = "root";
 		String password = "";
 		// SQL query to retrieve data
@@ -252,7 +254,7 @@ public class Student {
 	}
 
 	@SuppressWarnings("unused") DefaultTableModel populateTable() {
-		String host = "jdbc:mysql://localhost/school";
+		String host = "jdbc:mysql://localhost/schools";
 		String user = "root";
 		String password = "";
 
@@ -290,8 +292,8 @@ public class Student {
 		}
 		return tableModel;
 	}
-	public void deletedata(int id) {
-		String url = "jdbc:mysql://localhost/school";
+	public void deletedata(String RegNumber) {
+		String url = "jdbc:mysql://localhost/schools";
 		String user = "root";
 		String password = "";
 		//String userInput = JOptionPane.showInputDialog(null, "Enter id:");
@@ -299,9 +301,9 @@ public class Student {
 		//System.out.println("User entered: " + userInput);
 		// SQL query to delete data
 
-		String sql = "DELETE FROM user WHERE Fname = ?";
-		if(id==0) 
-			JOptionPane.showMessageDialog(null, "No id entered");
+		String sql = "DELETE FROM student WHERE RegNumber = ?";
+		if(RegNumber==null) 
+			JOptionPane.showMessageDialog(null, "No RegNumber entered");
 		try (
 				// Establish the con
 				Connection con = DriverManager.getConnection(url, user, password);
@@ -309,18 +311,18 @@ public class Student {
 				PreparedStatement stm = con.prepareStatement(sql);
 				) {
 			// Set the value for the WHERE clause
-			stm.setInt(1, id); // Assuming there is a column named 'id' for the WHERE clause
+			stm.setString(1, RegNumber); // Assuming there is a column named 'id' for the WHERE clause
 
 			// Execute the delete
 
-			int result = JOptionPane.showConfirmDialog(null, "Do you really want to delete the user with id "+id+"\n?", "Question", JOptionPane.YES_NO_OPTION);
+			int result = JOptionPane.showConfirmDialog(null, "Do you really want to delete the student with regnumber  "+RegNumber+"\n?", "Question", JOptionPane.YES_NO_OPTION);
 
 			// Check the user's choice
 			if (result == JOptionPane.YES_OPTION) {
 				//System.out.println("User clicked Yes");
 				int rowsAffected = stm.executeUpdate();
 				if (rowsAffected > 0) {
-					JOptionPane.showMessageDialog(null, "The user with id: "+id+"\n was deleted!");
+					JOptionPane.showMessageDialog(null, "The user with registration number: "+RegNumber+"\n was deleted!");
 
 				} else {
 					//System.out.println("Failed to delete data. No matching record found.");
@@ -341,13 +343,13 @@ public class Student {
 		}
 	}
 
-	public void updatedata(String Fname) {
-		String url = "jdbc:mysql://localhost/school";
+	public void updatedata(String RegNumber) {
+		String url = "jdbc:mysql://localhost/schools";
 		String user = "root";
 		String password = "";
 
 		// SQL query to update data
-		String sql = "UPDATE user SET Fname = ?, Lname = ?,Gender =?, RegNumber=? where Fname='"+Fname+"'";
+		String sql = "UPDATE student SET Fname = ?, Lname = ?,Gender =?, RegNumber=? where RegNumber='"+RegNumber+"'";
 
 		try (
 				// Establish the con
@@ -359,8 +361,8 @@ public class Student {
 			// Set the new values for the update
 			stm.setString(1, this.Fname);
 			stm.setString(2, this.Lname);
-			stm.setString(1, this.Gender);
-			stm.setString(2, this.RegNumber);
+			stm.setString(3, this.Gender);
+			stm.setString(4, this.RegNumber);
 
 			int result = JOptionPane.showConfirmDialog(null, "Do you really want to update the user with idd"+Fname+"\n?", "Question", JOptionPane.YES_NO_OPTION);
 
@@ -381,7 +383,7 @@ public class Student {
 				}
 			} else {
 				//System.out.println("User clicked No");
-				JOptionPane.showMessageDialog(null, "We will not delete your data");
+				JOptionPane.showMessageDialog(null, "We will not update your data");
 
 			}
 
@@ -392,7 +394,7 @@ public class Student {
 	}
 
 	public void updatedata(int id,String uname,String pwd) {
-		String url = "jdbc:mysql://localhost/school";
+		String url = "jdbc:mysql://localhost/schools";
 		String user = "root";
 		String password = "";
 

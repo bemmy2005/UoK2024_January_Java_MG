@@ -3,63 +3,144 @@ package questionOne;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class StudentForm extends JFrame {
+public class StudentForm implements ActionListener {
+	private JFrame frame ;
 
-	private JLabel firstNameLabel, lastNameLabel, genderLabel, registrationNumberLabel;
-	private JTextField firstNameField, lastNameField, registrationNumberField;
-	private JComboBox<String> genderComboBox;
-	private JButton insertButton, readButton, updateButton, deleteButton;
+	private JLabel firstNameLabel=new JLabel("First name: ");
+	private JLabel lastNameLabel=new JLabel("Last name: ");
+	private JLabel genderLabel=new JLabel("Gender name: "); 
+	private JLabel registrationNumberLabel=new JLabel("RegNumber: ");
+	String[] options = {"Male", "Female"};
+
+	private JTextField firstNameField=new JTextField(); 
+	private JTextField lastNameField=new JTextField(); 
+	private JTextField  registrationNumberField=new JTextField();;
+	private JComboBox<String> genderComboBox=new JComboBox<>(options);
+	//String selectedOption =null;
+	private JButton insertButton=new JButton("Create"); 
+	private JButton readButton=new JButton("Read"); 
+	private JButton updateButton=new JButton("Update"); 
+	private JButton deleteButton=new JButton("Delete");
 
 	public StudentForm() {
-		super("Student Information Form");
+		createWindow();
+		setLocationsAndSize();
+		addcompontentstoFrame();
+		addActionEvent();
+	}
 
-		// Define the labels and text fields
-		firstNameLabel = new JLabel("First name:");
-		firstNameField = new JTextField(15);
-		lastNameLabel = new JLabel("Last name:");
-		lastNameField = new JTextField(15);
-		genderLabel = new JLabel("Gender:");
-		genderComboBox = new JComboBox<>(new String[] {"Male", "Female"});
-		registrationNumberLabel = new JLabel("Registration Number:");
-		registrationNumberField = new JTextField(15);
 
-		// Define the buttons
-		insertButton = new JButton("Insert");
-		readButton = new JButton("Read");
-		updateButton = new JButton("Update");
-		deleteButton = new JButton("Delete");
+	private void addcompontentstoFrame() {
+		frame.add(firstNameLabel);
+		frame.add(lastNameLabel);
+		frame.add(genderLabel);
+		frame.add(registrationNumberLabel);
+		frame.add(firstNameField);
+		frame.add(lastNameField);
+		frame.add(registrationNumberField);
+		frame.add(genderComboBox);
+		frame.add(insertButton);
+		frame.add(readButton);
+		frame.add(updateButton);
+		frame.add(deleteButton);
 
-		// Add components to the panel
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridBagLayout());
-		panel.add(firstNameLabel, new GridBagConstraints(0, 0, 1, 1));
-		panel.add(firstNameField, new GridBagConstraints(1, 0, 2, 1));
-		panel.add(lastNameLabel, new GridBagConstraints(0, 1, 1, 1));
-		panel.add(lastNameField, new GridBagConstraints(1, 1, 2, 1));
-		panel.add(genderLabel, new GridBagConstraints(0, 2, 1, 1));
-		panel.add(genderComboBox, new GridBagConstraints(1, 2, 2, 1));
-		panel.add(registrationNumberLabel, new GridBagConstraints(0, 3, 1, 1));
-		panel.add(registrationNumberField, new GridBagConstraints(1, 3, 2, 1));
-		panel.add(insertButton, new GridBagConstraints(0, 4, 1, 1));
-		panel.add(readButton, new GridBagConstraints(1, 4, 1, 1));
-		panel.add(updateButton, new GridBagConstraints(2, 4, 1, 1));
-		panel.add(deleteButton, new GridBagConstraints(3, 4, 1, 1));
+	}
 
-		// Add the panel to the frame
-		add(panel);
 
-		// Set the size and location of the frame
-		setSize(400, 300);
-		setLocationRelativeTo(null);
+	private void setLocationsAndSize() {
+		firstNameLabel.setBounds(20, 20, 100, 30);
+		lastNameLabel.setBounds(20,70,100,30);
+		genderLabel.setBounds(20,120,100,30);
+		registrationNumberLabel.setBounds(20,170,100,30);
 
-		// Make the frame visible
-		setVisible(true);
+		firstNameField.setBounds(120,20,150,30);
+		lastNameField.setBounds(120,70,150,30);
+		genderComboBox.setBounds(120,120,150,30);
+		registrationNumberField.setBounds(120,170,150,30);
+
+		insertButton.setBounds(280,20,100,30);
+		readButton.setBounds(380,20,100,30);
+		updateButton.setBounds(280,120,100,30);
+		deleteButton.setBounds(380,120,100,30);
+
+	}
+
+
+	private void createWindow() {
+		frame=new JFrame();
+		frame.setTitle("Menu form");
+		frame.setBounds(10,10,500,250);
+		frame.getContentPane().setBackground(Color.gray);
+		frame.getContentPane().setLayout(null);
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
+
+	}
+
+
+	private void addActionEvent() {
+		insertButton.addActionListener(this); 
+		readButton.addActionListener(this); 
+		updateButton.addActionListener(this); 
+		deleteButton.addActionListener(this);
+		genderComboBox.addActionListener(this);
+		/*
+		genderComboBox.addActionListener(new ActionListener() {
+
+			@Override
+			 public void actionPerformed(ActionEvent e) {
+	            // Get the selected item from the JComboBox
+	            selectedOption = (String) genderComboBox.getSelectedItem();
+	            System.out.println(selectedOption);
+	            //System.out.println("Selected item: " + selectedOption);
+	        }
+		});*/
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Student st=new Student();
+		if(e.getSource()== insertButton) {
+			st.setFname(firstNameField.getText());
+			st.setLname(lastNameField.getText());
+			//int index = Arrays.binarySearch(options, genderComboBox.selec);
+			String selectedOption = (String) genderComboBox.getSelectedItem();
+			st.setGender(selectedOption);
+			st.setRegNumber(registrationNumberField.getText());
+
+			st.registertwo();
+		}
+		if(e.getSource()== 	readButton) {
+			DisplayStudentsInATable stview=new DisplayStudentsInATable();
+		}
+		if(e.getSource()== 	 updateButton) {
+			String userInput = JOptionPane.showInputDialog(null, "Please Enter Registration Number:");
+			st.setFname(firstNameField.getText());
+			st.setLname(lastNameField.getText());
+			String selectedOption = (String) genderComboBox.getSelectedItem();
+			st.setGender(selectedOption);
+			st.setRegNumber(userInput);
+			st.updatedata(userInput);
+		}
+		if(e.getSource()== 	deleteButton) {
+			String userInput = JOptionPane.showInputDialog(null, "Please Enter Registration Number:");
+			//myuser.deletedata(Integer.parseInt(userInput));
+			st.deletedata(userInput);
+		}
+
 	}
 
 	public static void main(String[] args) {
 		new StudentForm();
 	}
+
+
+
 }
 
 
